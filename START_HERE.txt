@@ -1,0 +1,32 @@
+RDK X5 EDGEVISION IGNITE — FIRST ACTIONS (November 6, 2026)
+
+READ README_AR.md first.
+
+1) Obtain an RDK X5 + 5V/5A dedicated USB-C power adapter + USB UVC webcam.
+2) Flash official supported RDK X5 image using RDK Studio and connect to Ethernet/Wi-Fi.
+3) SSH in from a PC; copy entire project onto RDK X5.
+4) On actual RDK X5:
+
+    cd RDK-X5-EdgeVision-Ignite-2026
+    bash scripts/01_preflight.sh
+    python3 scripts/02_camera_test.py --device 0 --output evidence/02_sensor_camera.png
+    bash scripts/03_setup_model.sh
+    bash scripts/04_run_yolo.sh 0
+
+    Last command REQUIRES GUI / X11, not plain SSH.
+
+5) OPTIONAL GPIO (not necessary for Stage1): powered OFF before wiring,
+   GPIO physical BOARD 15 -> resistor 470R -> LED anode;
+   LED cathode -> physical BOARD 14 GND.
+   sudo python3 scripts/05_led_test.py --pin 15 --seconds 10
+
+6) Capture REAL board flash+SSH and GUI YOLO screenshots.
+7) Complete docs/SUBMISSION_CHECKLIST.md; publish personal GitHub; post Discord
+   permalink; submit showcase PR to official repo under projects/.
+
+CAUTION: no physical RDK X5 hardware has been verified by this package.
+
+IMPORTANT v2: Stage 1 video OPTIONAL; Stage 3 video MANDATORY.
+Read docs/VIDEO_REQUIREMENTS_AND_SHOTLIST_AR.md.
+Run bash scripts/07_board_info.sh and python3 scripts/08_verify_submission.py
+when actual device evidence + public links are available.

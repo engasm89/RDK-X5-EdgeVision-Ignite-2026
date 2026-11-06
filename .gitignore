@@ -1,0 +1,21 @@
+# Real board screenshots may contain confidential data; review before making public.
+/vendor/
+*.tar.gz
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.DS_Store
+*.log
+.env
+.env.*
+*.pem
+*.key
+*.secret
+# Keep evidence directory but do not auto-publish actual recordings.
+/evidence/*
+!/evidence/README.md
+
+/vendor/
+*.mp4
+*.mov
+*.mkv
