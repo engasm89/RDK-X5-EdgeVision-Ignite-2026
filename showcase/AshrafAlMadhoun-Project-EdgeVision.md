@@ -45,4 +45,6 @@ Software prepared and host-tested only; untested on the physical RDK X5. Board r
 
 ---
 
-CONSENT PENDING OWNER APPROVAL — do not submit until Ashraf explicitly approves. The official consent statement ("I agree that this showcase document may be used by the Robotics Dream Keeper Challenge organizers for program promotion, judging, and archives as described in the official README.") has NOT been agreed on the owner's behalf and must be added only after his explicit approval.
+I agree that this showcase document may be used by the Robotics Dream Keeper Challenge organizers for program promotion, judging, and archives as described in the official README.
+
+*Owner approval: Ashraf Al-Madhoun approved this consent statement on 7 Nov 2026 for this showcase document only. Stage 1 evidence is still pending a physical board run; this file must not be submitted as a completed Stage 1 showcase until flash/SSH, camera, and YOLO evidence and a Discord permalink exist.*
