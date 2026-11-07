@@ -37,7 +37,7 @@
 - [ ] Insert actual public repository/evidence URLs in showcase draft
 - [ ] Post links in **personal Discord thread**, copy a **permalink**
 - [ ] Follow [official PR guide](https://github.com/D-Robotics/Robotics-Dream-Keeper-Challenge-Winter/blob/main/docs/github-pr-guide.md)
-- [ ] Fork official repo and PR ONE showcase file at `projects/RDK-X5-EdgeVision-Ignite.md`
+- [ ] Fork official repo and PR ONE showcase file at `projects/AshrafAlMadhoun-Project-EdgeVision.md`
 - [ ] Verify PR URLs accessible without authentication where expected
 
 ## Deadline

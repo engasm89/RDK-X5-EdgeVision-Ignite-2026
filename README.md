@@ -27,6 +27,12 @@ Meet the RDK Challenge Winter **Stage 1 — Ignite** requirements with an RDK X5
 
 **Safety:** GPIO15 is a 3.3V-level GPIO on supported RDK X5 configurations; verify board revision/IO voltage before wiring. Power **off** to connect jumpers; never place LED directly across a GPIO without a resistor. LED is only a heartbeat/IO demonstration, **not a YOLO alert output**.
 
+## Software requirements
+
+> No `requirements.txt` is provided for the board runtime, deliberately. There is **no `pip install` step** for the RDK X5 runtime: the supported board image is expected to provide Python 3, the board-supported OpenCV package (`cv2`), and `Hobot.GPIO`. Do **not** run `pip install -U` against the D-Robotics Python runtime, and do not install a random vendor OpenCV build — use only the OpenCV package supplied/supported by the chosen board image (see the official board guidance). No Python/OpenCV/`Hobot.GPIO` versions are stated here because **none has been verified on the owner's board yet**; record the actual versions from `bash scripts/07_board_info.sh` output after first boot and update this section. The official YOLO11m demo (model, runtime, and its own dependencies) is downloaded separately on the board by `scripts/03_setup_model.sh` and is **not** bundled in this repository. Host-side tooling for this repository is only `bash`, `python3` (3.8+ for the test suite), and `git`; `v4l-utils` (`v4l2-ctl`) is optional but recommended on the board for camera identification.
+
+**Board provenance (verified from organizer correspondence, 4 Nov 2026):** the owner holds an RDK X5 received through the earlier D-Robotics Ambassador Program, and D-Robotics (Bella, nan.xiang@d-robotics.cc) confirmed in writing that this existing board may be used for the Winter Challenge if it is still operational. Its board revision, OS image version, camera model, and operational state are **still unverified** — no flash, SSH, camera, or inference run has been performed or recorded for this project yet.
+
 ## Quick start (run these on the real RDK X5, not on your laptop)
 
 ### Step A — Flash + SSH
@@ -71,7 +77,7 @@ If camera index is not 0, inspect `v4l2-ctl --list-devices` or `ls -l /dev/video
 
 ### Step E — Submission
 
-Read [docs/SUBMISSION_CHECKLIST.md](docs/SUBMISSION_CHECKLIST.md), edit the draft showcase [showcase/RDK-X5-EdgeVision-Ignite.md](showcase/RDK-X5-EdgeVision-Ignite.md), and run:
+Read [docs/SUBMISSION_CHECKLIST.md](docs/SUBMISSION_CHECKLIST.md), edit the draft showcase [showcase/AshrafAlMadhoun-Project-EdgeVision.md](showcase/AshrafAlMadhoun-Project-EdgeVision.md), and run:
 
 ```bash
 python3 scripts/06_verify_submission.py
@@ -91,6 +97,41 @@ That check is a *local checklist*; it cannot confirm Discord, GitHub permission,
 `USB UVC Camera -> USB-A host -> RDK X5 (video frames) -> official YOLO11m demo / BPU runtime -> object detection window -> actual evidence screenshot`
 
 The optional `BOARD15 -> resistor -> LED -> GND` circuit is an independent GPIO test, not a model confidence or detection indicator.
+
+## Expected output
+
+A successful on-board run looks like this (qualitative only — **no FPS, latency, or accuracy figure is claimed**; none has been measured):
+
+- **Preflight (`01_preflight.sh`):** architecture `aarch64`, a board-model string containing RDK X5, at least one `/dev/video*` node, `cv2` and `Hobot.GPIO` reported `OK`.
+- **Camera test (`02_camera_test.py`):** one non-empty real frame saved (e.g. `evidence/02_sensor_camera.png`), showing the actual scene in front of the USB camera.
+- **YOLO run (`04_run_yolo.sh 0`):** a GUI detection window opens on the board desktop / X11 session showing live camera video with bounding boxes and class labels drawn on detected objects, plus terminal output echoed to the console and saved to `evidence/06_inference_log.txt`. The script exits non-zero (guard failure) on any non-RDK host — that is expected off-board behaviour, not a demo failure.
+- **Submission check (`08_verify_submission.py`):** exit 0 only after all three evidence images, the Discord permalink, the showcase PR link, and the board/camera metadata are filled with real values.
+
+## Evidence checklist
+
+- [ ] `evidence/01_flash_ssh.png` — legible screenshot/composite of successful flash + active SSH session (no passwords, tokens, keys, or serials visible).
+- [ ] `evidence/02_sensor_camera.png` — real frame captured from the USB camera on the board.
+- [ ] `evidence/03_yolo_on_rdk_x5.png` — screenshot of the YOLO11m detection window running on the RDK X5.
+- [ ] `evidence/06_inference_log.txt` — terminal log captured by `04_run_yolo.sh` via `tee` (only produced when the demo is run on the board).
+- [ ] `submission/stage1_links.json` — board model, OS image version, and camera model filled with real values (no `TO_FILL`).
+- [ ] Discord Stage 1 post permalink saved in `submission/discord_permalink.txt`.
+- [ ] Showcase PR filed against the official Winter repository (`projects/AshrafAlMadhoun-Project-EdgeVision.md`).
+- [ ] `python3 scripts/08_verify_submission.py` exits 0.
+
+Evidence files are gitignored by default and must be reviewed for sensitive data, then added intentionally with `git add -f` — a routine `git add .` will **not** publish them.
+
+## Known limitations
+
+- **Untested on physical hardware.** No flash, SSH session, camera frame, or YOLO run has been performed for this project. All scripts and wiring have been tested only on an x86_64 host (mocked unit tests) — see `docs/TEST_REPORT.md`.
+- **Board / OS / camera unknown.** Board revision, system-image name/version, and USB camera make/model/VID:PID are unknown and are not invented anywhere in this repository. The owner's Ambassador-program RDK X5 is confirmed eligible by the organizer, but its operational state is unverified.
+- **No performance figures.** FPS, latency, power draw, thermal behaviour, and 24/7 stability have **not** been measured. Do not quote any such number from this project.
+- **Board-identity guard unverified.** `scripts/04_run_yolo.sh` refuses to run unless `/proc/device-tree/model` matches its RDK X5 regex; that regex has never been checked against a real board string and may need correction on first use.
+- **Exact vendor run command unverified.** The official case page confirms the YOLO11m archive URL, but the exact `main.py --camera-id 0` invocation has not been confirmed against the vendor archive's own README on the board.
+- **No checksum pin.** `scripts/03_setup_model.sh` validates the downloaded archive structurally but does not verify it against a published SHA-256 (none is pinned).
+- **GUI required.** The YOLO demo needs an HDMI desktop or X11 forwarding; plain SSH without a display cannot show the detection window.
+- **Camera assumptions.** Fixed 640×480 capture in `02_camera_test.py` with no fallback; camera index 0 is assumed to be the USB camera and may not be on boards with multiple `/dev/video*` nodes.
+- **License detection.** GitHub reports this repository's license as "Other (NOASSERTION)" despite the MIT `LICENSE` file (the appended third-party exclusion line likely breaks detection); verify before stating "MIT" in the showcase.
+- **Optional LED only.** The GPIO LED is a heartbeat indicator, not a detection-driven output; its current (~2.8 mA) is an approximate calculation, not a measurement.
 
 ## Troubleshooting
 

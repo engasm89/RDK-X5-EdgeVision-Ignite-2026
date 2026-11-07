@@ -1,5 +1,7 @@
 # RDK X5 EdgeVision Ignite — USB Camera + On-Device YOLO11m
 
+> **SUPERSEDED — DO NOT USE FOR THE PR.** This draft does not follow the official showcase template and uses the wrong filename. The current draft is `showcase/AshrafAlMadhoun-Project-EdgeVision.md`. This file is kept only for history; do not copy it to the official repository.
+
 **Participant:** Ashraf Al-Madhoun / Educational Engineering Team  
 **Challenge:** Robotics Dream Keeper Challenge — Winter 2026, Stage 1 (Ignite)  
 **Status:** DRAFT — DO NOT SUBMIT UNTIL PHYSICAL BOARD EVIDENCE IS CAPTURED

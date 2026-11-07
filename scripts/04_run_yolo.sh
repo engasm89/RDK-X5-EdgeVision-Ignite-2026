@@ -24,5 +24,14 @@ if [[ -z "${DISPLAY:-}" && -z "${WAYLAND_DISPLAY:-}" ]]; then
 fi
 printf '[RDK X5] %s\n' "$BOARD_MODEL"
 printf '[CAMERA] index %s\n' "$CAMERA_ID"
+# NOTE: the board-identity guard above is UNVERIFIED against a real
+# /proc/device-tree/model string; if an official X5 revision reports a
+# different string, verify it before editing the regex.
+# Inference output is captured to evidence/06_inference_log.txt (on the
+# board only) as well as the terminal, so the run leaves a log artifact.
+# 'exec' is intentionally NOT used here so the pipe to tee can run;
+# 'set -o pipefail' (via pipefail in set -Eeuo pipefail) preserves the
+# demo's exit status through the pipe.
+mkdir -p "$ROOT/evidence"
 cd "$(dirname "$ENTRY")"
-exec python3 main.py --camera-id "$CAMERA_ID"
+python3 main.py --camera-id "$CAMERA_ID" 2>&1 | tee "$ROOT/evidence/06_inference_log.txt"

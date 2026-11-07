@@ -29,8 +29,12 @@ for name in ('cv2','Hobot.GPIO'):
     except Exception as exc:
         print('  NOT READY', name, type(exc).__name__, str(exc)[:160])
 PYCODE
-printf '\nNetwork interface summary (keep private if sensitive):\n'
-if command -v ip >/dev/null; then ip -brief link || true; fi
+printf '\nNetwork interfaces (names and state only — no MAC addresses or IPs printed):\n'
+for iface_path in /sys/class/net/*; do
+  iface="$(basename "$iface_path")"
+  state="$(cat "$iface_path/operstate" 2>/dev/null || echo unknown)"
+  printf '  %s: %s\n' "$iface" "$state"
+done
 printf '\nOfficial demo directory: '
 if [[ -f /app/pydev_demo/07_usb_camera_sample/usb_camera_yolov5x.py ]]; then echo 'legacy YOLOv5 demo present'; else echo 'optional legacy demo not found'; fi
 printf '\nNote: a passing diagnostic is not physical camera/AI success.\n'

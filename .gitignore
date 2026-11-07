@@ -11,11 +11,13 @@ __pycache__/
 *.pem
 *.key
 *.secret
-# Keep evidence directory but do not auto-publish actual recordings.
+# Evidence is NOT auto-published: /evidence/* is ignored by default.
+# After reviewing an evidence file for sensitive data (passwords, tokens,
+# keys, serials, MACs, IPs), add it intentionally with 'git add -f'.
+# The inference log is the one deliberate exception to the *.log rule:
 /evidence/*
 !/evidence/README.md
-
-/vendor/
+!/evidence/06_inference_log.txt
 *.mp4
 *.mov
 *.mkv
